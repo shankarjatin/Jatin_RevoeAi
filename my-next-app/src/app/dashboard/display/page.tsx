@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
-import io from 'socket.io-client';
 import Table from '../../../components/Table';
 const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
 // const socket = io('http://localhost:3000');
@@ -15,7 +14,7 @@ const Dashboard = () => {
   const [newColumn, setNewColumn] = useState('');
   const [columnType, setColumnType] = useState('text');
   const [isLoading, setIsLoading] = useState(true);
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [cookies, removeCookie] = useCookies(['token']);
   const router = useRouter();
   const token = cookies.token;
 
