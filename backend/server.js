@@ -42,7 +42,7 @@ socketService(io);
 // Sync Google Sheets data every minute to check for updates
 setInterval(() => {
   googleSheetsService.syncSheetData(io);
-}, 6000);
+}, 60000);
 
 // Start server
 server.listen(process.env.PORT, () => {
