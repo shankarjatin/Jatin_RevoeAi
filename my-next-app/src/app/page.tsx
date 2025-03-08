@@ -30,7 +30,7 @@ const Signup = () => {
       });
       router.push('/dashboard/auth/login'); // Redirect to login after successful signup
     } catch (err) {
-      setError('Error during signup');
+      setError('Error during signup' + err);
     }
   };
 
