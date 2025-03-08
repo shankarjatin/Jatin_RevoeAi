@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
 import io from 'socket.io-client';
 import Table from '../../../components/Table';
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
 const socket = io('http://localhost:3000');
 
 const Dashboard = () => {

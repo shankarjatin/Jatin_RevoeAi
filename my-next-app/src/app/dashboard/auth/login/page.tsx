@@ -29,7 +29,7 @@ import CustomTextField from '../../../../components/mui/TextField';
 // Styled Component Imports
 import AuthIllustrationWrapper from '../../../../components/AuthIllustrationWrapper'
 import { Eye, EyeOff, Facebook, Github, Twitter } from 'lucide-react';
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
 const Login = () => {
   // States
   const [email, setEmail] = useState('');
