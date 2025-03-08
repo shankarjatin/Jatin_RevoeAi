@@ -18,14 +18,14 @@ const server = http.createServer(app);
 app.use(cors());
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Update this to match your client URL
+    origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/", // Update this to match your client URL
     methods: ["GET", "POST"]
   }
 });
 
 // Middlewares
 app.use(cors({
-  origin: "http://localhost:3001", // Update this to match your client URL
+  origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/", // Update this to match your client URL
   methods: ["GET", "POST"],
   allowedHeaders: ['Authorization'],
   credentials: true
