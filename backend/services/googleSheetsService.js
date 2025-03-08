@@ -7,6 +7,8 @@ const firebaseAdmin = require('firebase-admin');
 dotenv.config();
 
 // const serviceAccountPath = path.resolve(__dirname, '..', process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH);
+dotenv.config();
+
 const serviceAccount = {
   type: process.env.SERVICE_ACCOUNT_TYPE,
   project_id: process.env.SERVICE_ACCOUNT_PROJECT_ID,
@@ -20,9 +22,11 @@ const serviceAccount = {
   client_x509_cert_url: process.env.SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
   universe_domain: process.env.SERVICE_ACCOUNT_UNIVERSE_DOMAIN
 };
-serviceAccountJson=JSON.stringify(serviceAccount)
+
+console.log(serviceAccount); // Log the service account object to verify the fields
+
 const auth = new google.auth.GoogleAuth({
-  credentials: serviceAccountJson,
+  credentials: serviceAccount,
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
