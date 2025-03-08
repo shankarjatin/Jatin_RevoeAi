@@ -32,7 +32,7 @@ const Dashboard = () => {
       .then((response) => {
         console.log('Data from MongoDB:', response.data);
         const [columnNames, ...rowData] = response.data;
-        setColumns(columnNames.map(name => ({ name })));
+        setColumns(columnNames.map((name: string) => ({ name })));
         setRows([...rowData]); // Spread into a new array to ensure a new reference
         setIsLoading(false);
       })
@@ -85,7 +85,7 @@ const Dashboard = () => {
         headers: { Authorization: `Bearer ${cookies.token}` },
       });
       // Emit event to Socket.IO server
-      socket.emit('addNewRow', rowData);
+ 
     } catch (err) {
       console.error("Error adding row", err);
     }
