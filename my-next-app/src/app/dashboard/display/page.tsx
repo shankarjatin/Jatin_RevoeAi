@@ -4,25 +4,25 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
+
 import Table from '../../../components/Table';
 const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
-// const socket = io('http://localhost:3000');
+
+type Column = {
+  name: string;
+};
+
+type Row = {
+  [key: string]: string;
+};
 
 const Dashboard = () => {
-  interface Column {
-    name: string;
-  }
-
   const [columns, setColumns] = useState<Column[]>([]);
-  interface Row {
-    [key: string]: string | number | boolean | null;
-  }
-
   const [rows, setRows] = useState<Row[]>([]);
   const [newColumn, setNewColumn] = useState('');
   const [columnType, setColumnType] = useState('text');
   const [isLoading, setIsLoading] = useState(true);
-  const [cookies, removeCookie] = useCookies(['token']);
+  const [cookies, , removeCookie] = useCookies(['token']);
   const router = useRouter();
   const token = cookies.token;
 
@@ -40,10 +40,9 @@ const Dashboard = () => {
         console.log('Data from MongoDB:', response.data);
         const [columnNames, ...rowData] = response.data;
         setColumns(columnNames.map((name: string) => ({ name })));
-        setRows([...rowData]); // Spread into a new array to ensure a new reference
+        setRows(rowData); // Ensure rowData is an array of objects
         setIsLoading(false);
       })
-   
       .catch((err) => {
         console.error(err);
         setIsLoading(false);
@@ -52,16 +51,12 @@ const Dashboard = () => {
 
     // Initial fetch and setting up interval
     fetchData();
-     setInterval(fetchData, 3000);
-
-    // Setup socket listener once
-
+    const intervalId = setInterval(fetchData, 3000);
 
     return () => {
-    //   clearInterval(intervalId);
- 
+      clearInterval(intervalId);
     };
-  }, [token, router,]); 
+  }, [token, router]);
 
   const handleAddColumn = async () => {
     if (newColumn) {
@@ -71,10 +66,7 @@ const Dashboard = () => {
           headers: { Authorization: `Bearer ${cookies.token}` },
         });
         const updatedData = response.data;
-        interface ColumnData {
-          name: string;
-        }
-        const newColumnNames = updatedData.columns.map((col: ColumnData) => col.name);
+        const newColumnNames = updatedData.columns.map((col: Column) => col.name);
         const newRows = updatedData.rows;
 
         setColumns(newColumnNames.map((name: string) => ({ name })));
@@ -91,11 +83,10 @@ const Dashboard = () => {
   const handleAddRow = async () => {
     const rowData = Array(columns.length).fill('');
     try {
-      await axios.post(`${API_BASE_URL}/api/dashboard/add-row`, { rowData }, {
+      await axios.post(`${API_BASE_URL}/dashboard/add-row`, { rowData }, {
         headers: { Authorization: `Bearer ${cookies.token}` },
       });
       // Emit event to Socket.IO server
- 
     } catch (err) {
       console.error("Error adding row", err);
     }
@@ -108,53 +99,50 @@ const Dashboard = () => {
   };
 
   return (
-<div className="bg-gray-950 p-8 min-h-screen">
-    <div className="flex justify-between items-center mb-4">
-    <h1 className="text-3xl font-semibold text-gray-200 mb-4">Dashboard Integrated with Spreadsheet</h1>
-      
-      {/* Link to the spreadsheet */}
-      <p className="text-blue-300 mb-4">
-        Check and update the spreadsheet details <a href="https://docs.google.com/spreadsheets/d/13Uu2l9zT9Vo4ZpK2kSmsXLqTm7yoWgSpjmT1_8NjA58/edit?usp=sharing" target="_blank" rel="noopener noreferrer">here</a>.
-      </p>
+    <div className="bg-gray-950 p-8 min-h-screen">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-semibold text-gray-200 mb-4">Dashboard Integrated with Spreadsheet</h1>
+        <p className="text-blue-300 mb-4">
+          Check and update the spreadsheet details <a href="https://docs.google.com/spreadsheets/d/13Uu2l9zT9Vo4ZpK2kSmsXLqTm7yoWgSpjmT1_8NjA58/edit?usp=sharing" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
         <button onClick={handleLogout} className="p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-            Logout
+          Logout
         </button>
-    </div>
+      </div>
 
-    <div className="mb-4">
+      <div className="mb-4">
         <input
-            type="text"
-            placeholder="New Column Name"
-            value={newColumn}
-            onChange={(e) => setNewColumn(e.target.value)}
-            className="p-2 w-full md:w-auto border border-gray-700 bg-gray-800 text-white rounded focus:border-blue-600 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          type="text"
+          placeholder="New Column Name"
+          value={newColumn}
+          onChange={(e) => setNewColumn(e.target.value)}
+          className="p-2 w-full md:w-auto border border-gray-700 bg-gray-800 text-white rounded focus:border-blue-600 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
         />
         <select
-            value={columnType}
-            onChange={(e) => setColumnType(e.target.value)}
-            className="p-2 border border-gray-700 bg-gray-800 text-white rounded focus:border-blue-600 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          value={columnType}
+          onChange={(e) => setColumnType(e.target.value)}
+          className="p-2 border border-gray-700 bg-gray-800 text-white rounded focus:border-blue-600 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
         >
-            <option value="text">Text</option>
-            <option value="date">Date</option>
+          <option value="text">Text</option>
+          <option value="date">Date</option>
         </select>
         <button onClick={handleAddColumn} className="p-2 bg-green-500 text-white rounded ml-2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-            Add Column
+          Add Column
         </button>
-    </div>
+      </div>
 
-    <div className="mb-4">
+      <div className="mb-4">
         <button onClick={handleAddRow} className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-            Add New Row
+          Add New Row
         </button>
-    </div>
+      </div>
 
-    {isLoading ? (
+      {isLoading ? (
         <p className="text-white">Loading...</p>
-    ) : (
-        <Table columns={columns} rows={rows} />
-    )}
-</div>
-
+      ) : (
+        <Table columns={columns} rows={rows.map(row => Object.values(row))} />
+      )}
+    </div>
   );
 };
 
