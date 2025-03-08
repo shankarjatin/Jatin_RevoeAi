@@ -9,8 +9,16 @@ const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
 // const socket = io('http://localhost:3000');
 
 const Dashboard = () => {
-  const [columns, setColumns] = useState<any[]>([]);
-  const [rows, setRows] = useState<any[]>([]);
+  interface Column {
+    name: string;
+  }
+
+  const [columns, setColumns] = useState<Column[]>([]);
+  interface Row {
+    [key: string]: string | number | boolean | null;
+  }
+
+  const [rows, setRows] = useState<Row[]>([]);
   const [newColumn, setNewColumn] = useState('');
   const [columnType, setColumnType] = useState('text');
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +71,10 @@ const Dashboard = () => {
           headers: { Authorization: `Bearer ${cookies.token}` },
         });
         const updatedData = response.data;
-        const newColumnNames = updatedData.columns.map((col: any) => col.name);
+        interface ColumnData {
+          name: string;
+        }
+        const newColumnNames = updatedData.columns.map((col: ColumnData) => col.name);
         const newRows = updatedData.rows;
 
         setColumns(newColumnNames.map((name: string) => ({ name })));
