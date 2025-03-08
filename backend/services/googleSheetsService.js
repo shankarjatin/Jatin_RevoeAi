@@ -31,7 +31,7 @@ async function syncSheetData(io) {
 
     // Update Firebase Realtime Database
     const db = firebaseAdmin.database();
-    await db.ref('/sheetsData').set(data);
+    await db.ref('/sheetData').set(data); // Ensure this path matches the one in getDashboardData
 
     // Notify clients about the update
     io.emit('sheetsDataUpdated', data);

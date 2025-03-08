@@ -1,19 +1,20 @@
-const jwt = require('jwt-simple');
-const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
-  const token = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(403).json({ message: 'No token provided' });
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'No token provided' });
   }
 
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+
   try {
-    const decoded = jwt.decode(token, process.env.SECRET_KEY);
-    req.user = decoded; // Attach the decoded token (user info) to the request
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    return res.status(401).json({ message: 'Invalid token' });
   }
 };
 
