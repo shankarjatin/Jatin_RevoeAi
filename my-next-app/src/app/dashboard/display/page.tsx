@@ -7,7 +7,7 @@ import { useCookies } from 'react-cookie';
 import io from 'socket.io-client';
 import Table from '../../../components/Table';
 const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
-const socket = io('http://localhost:3000');
+// const socket = io('http://localhost:3000');
 
 const Dashboard = () => {
   const [columns, setColumns] = useState<any[]>([]);
@@ -48,18 +48,13 @@ const Dashboard = () => {
      setInterval(fetchData, 3000);
 
     // Setup socket listener once
-    socket.on('sheetDataUpdated', (data) => {
-      console.log('Real-time update from Firebase:', data);
-      const [columnNames, ...rowData] = data;
-      setColumns(columnNames.map(name => ({ name })));
-      setRows([...rowData]); // Ensure new data triggers a render update
-    });
+
 
     return () => {
     //   clearInterval(intervalId);
-      socket.off('sheetDataUpdated');
+ 
     };
-  }, [token, router, socket]); 
+  }, [token, router,]); 
 
   const handleAddColumn = async () => {
     if (newColumn) {
@@ -109,7 +104,7 @@ const Dashboard = () => {
       
       {/* Link to the spreadsheet */}
       <p className="text-blue-300 mb-4">
-        Check and update the spreadsheet details <a href="LINK_TO_YOUR_SPREADSHEET" target="_blank" rel="noopener noreferrer">here</a>.
+        Check and update the spreadsheet details <a href="https://docs.google.com/spreadsheets/d/13Uu2l9zT9Vo4ZpK2kSmsXLqTm7yoWgSpjmT1_8NjA58/edit?usp=sharing" target="_blank" rel="noopener noreferrer">here</a>.
       </p>
         <button onClick={handleLogout} className="p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
             Logout
