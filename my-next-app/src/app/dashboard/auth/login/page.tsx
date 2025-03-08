@@ -9,16 +9,15 @@ import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
-// MUI Imports
 
 // Component Imports
 
-// import CustomTextField from '../../../../components/mui/TextField';
+
 // Config Imports
 
 
-// // Styled Component Imports
-// import AuthIllustrationWrapper from '../../../../components/AuthIllustrationWrapper'
+// Styled Component Imports
+
 import { Eye, EyeOff, Facebook, Github, Twitter } from 'lucide-react';
 const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
 const Login = () => {
@@ -26,9 +25,9 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  // const [token, setToken] = useState('');
+  const [token, setToken] = useState('');
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-
+console.log(token);
   // Hooks
   const router = useRouter();
   const [, setCookie] = useCookies(['token']);
@@ -44,7 +43,7 @@ const Login = () => {
       });
       const { token } = response.data;
       localStorage.setItem('token', token); // Save token in localStorage
-      // setToken(token);
+      setToken(token);
       setCookie('token', token, { path: '/' }); // Set cookie with the token
 
       router.push('/dashboard/display'); // Redirect to dashboard after successful login
