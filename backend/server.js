@@ -92,7 +92,7 @@ setInterval(() => {
   } catch (error) {
     console.error('Google Sheets Sync Error:', error);
   }
-}, 60000);
+}, 6000);
 
 // Start server
 const PORT = process.env.PORT || 5000;
