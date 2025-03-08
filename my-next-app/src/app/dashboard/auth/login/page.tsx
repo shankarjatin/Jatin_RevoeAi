@@ -49,6 +49,7 @@ const Login = () => {
 
       router.push('/dashboard/display'); // Redirect to dashboard after successful login
     } catch (err) {
+      console.log(err);
       setError('Invalid credentials');
     }
   };
