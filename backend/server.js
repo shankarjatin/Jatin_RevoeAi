@@ -69,7 +69,7 @@ socketService(io);
 // Sync Google Sheets data every minute to check for updates
 setInterval(() => {
   googleSheetsService.syncSheetData(io);
-}, 60000);
+}, 6000);
 
 // Start server
 server.listen(process.env.PORT, () => {
