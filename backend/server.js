@@ -32,6 +32,8 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.options('*', cors()); // Allow preflight requests
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
