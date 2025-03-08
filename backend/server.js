@@ -38,10 +38,23 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
   .catch(err => console.log('MongoDB connection error:', err));
 
 // Firebase initialization
-const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH);
+const serviceAccountJson = {
+  type: process.env.NEW_SERVICE_ACCOUNT_TYPE,
+  project_id: process.env.NEW_SERVICE_ACCOUNT_PROJECT_ID,
+  private_key_id: process.env.NEW_SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+  private_key: process.env.NEW_SERVICE_ACCOUNT_PRIVATE_KEY,
+  client_email: process.env.NEW_SERVICE_ACCOUNT_CLIENT_EMAIL,
+  client_id: process.env.NEW_SERVICE_ACCOUNT_CLIENT_ID,
+  auth_uri: process.env.NEW_SERVICE_ACCOUNT_AUTH_URI,
+  token_uri: process.env.NEW_SERVICE_ACCOUNT_TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.NEW_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL,
+  client_x509_cert_url: process.env.NEW_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
+  universe_domain: process.env.NEW_SERVICE_ACCOUNT_UNIVERSE_DOMAIN
+};
+
 
 firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
+  credential: firebaseAdmin.credential.cert(serviceAccountJson),
   databaseURL: process.env.FIREBASE_DATABASE_URL,
 });
 
