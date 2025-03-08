@@ -112,8 +112,9 @@ const Dashboard = () => {
     <div className="bg-gray-950 p-8 min-h-screen">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-semibold text-gray-200 mb-4">Dashboard Integrated with Spreadsheet</h1>
+        <br></br>
         <p className="text-blue-300 mb-4">
-          Check and update the spreadsheet details <a href="https://docs.google.com/spreadsheets/d/13Uu2l9zT9Vo4ZpK2kSmsXLqTm7yoWgSpjmT1_8NjA58/edit?usp=sharing" target="_blank" rel="noopener noreferrer">here</a>.
+           <a href="https://docs.google.com/spreadsheets/d/13Uu2l9zT9Vo4ZpK2kSmsXLqTm7yoWgSpjmT1_8NjA58/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className='text-blue-950'>Check and update the spreadsheet details here</a>.
         </p>
         <button onClick={handleLogout} className="p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
           Logout
