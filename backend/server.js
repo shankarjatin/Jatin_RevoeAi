@@ -26,7 +26,7 @@ const io = new Server(server, {
 
 // Middlewares
 app.use(cors({
-  origin: "https://jatin-revoe-ai-f67p.vercel.app/", // Update with your frontend URL
+  origin: "https://jatin-revoe-ai-f67p.vercel.app", // Update with your frontend URL
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Authorization", "Content-Type"],
   credentials: true
