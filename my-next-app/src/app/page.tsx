@@ -22,17 +22,36 @@ const Signup = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(""); // Clear any previous errors
+  
     try {
-      await axios.post(`${API_BASE_URL}/auth/signup`, {
-        email,
-        password,
-        name,
-      });
-      router.push('/dashboard/auth/login'); // Redirect to login after successful signup
-    } catch (err) {
-      setError('Error during signup' + err);
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/signup`,
+        {
+          email,
+          password,
+          name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // Ensure cookies/sessions are handled properly
+        }
+      );
+  
+      if (response.status === 201 || response.status === 200) {
+        router.push('/dashboard/auth/login'); // Redirect on success
+      } else {
+        setError("Signup failed. Please try again.");
+      }
+  
+    } catch (err: any) {
+      console.error("Signup Error:", err.response ? err.response.data : err.message);
+      setError(err.response?.data?.message || "An unexpected error occurred during signup.");
     }
   };
+  
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-950">
