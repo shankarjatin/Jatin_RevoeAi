@@ -15,48 +15,61 @@ dotenv.config();
 // Initialize app
 const app = express();
 const server = http.createServer(app);
-app.use(cors());
+
 const io = new Server(server, {
   cors: {
-    origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/", // Update this to match your client URL
-    methods: ["GET", "POST"]
+    origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/",
+    methods: ["GET", "POST"],
+    credentials: true,
   }
 });
 
 // Middlewares
 app.use(cors({
-  origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/", // Update this to match your client URL
+  origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/",
   methods: ["GET", "POST"],
-  allowedHeaders: ['Authorization'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true
 }));
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.log('MongoDB connection error:', err));
+
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection lost:', err);
+});
 
 // Firebase initialization
-const serviceAccountJson = {
-  type: process.env.NEW_SERVICE_ACCOUNT_TYPE,
-  project_id: process.env.NEW_SERVICE_ACCOUNT_PROJECT_ID,
-  private_key_id: process.env.NEW_SERVICE_ACCOUNT_PRIVATE_KEY_ID,
-  private_key: process.env.NEW_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  client_email: process.env.NEW_SERVICE_ACCOUNT_CLIENT_EMAIL,
-  client_id: process.env.NEW_SERVICE_ACCOUNT_CLIENT_ID,
-  auth_uri: process.env.NEW_SERVICE_ACCOUNT_AUTH_URI,
-  token_uri: process.env.NEW_SERVICE_ACCOUNT_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.NEW_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL,
-  client_x509_cert_url: process.env.NEW_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
-  universe_domain: process.env.NEW_SERVICE_ACCOUNT_UNIVERSE_DOMAIN
-};
+let serviceAccountJson;
+try {
+  serviceAccountJson = {
+    type: process.env.NEW_SERVICE_ACCOUNT_TYPE,
+    project_id: process.env.NEW_SERVICE_ACCOUNT_PROJECT_ID,
+    private_key_id: process.env.NEW_SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+    private_key: process.env.NEW_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    client_email: process.env.NEW_SERVICE_ACCOUNT_CLIENT_EMAIL,
+    client_id: process.env.NEW_SERVICE_ACCOUNT_CLIENT_ID,
+    auth_uri: process.env.NEW_SERVICE_ACCOUNT_AUTH_URI,
+    token_uri: process.env.NEW_SERVICE_ACCOUNT_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.NEW_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.NEW_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
+    universe_domain: process.env.NEW_SERVICE_ACCOUNT_UNIVERSE_DOMAIN
+  };
 
-
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccountJson),
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-});
+  firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(serviceAccountJson),
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+  });
+  console.log('Firebase initialized');
+} catch (error) {
+  console.error('Failed to initialize Firebase:', error);
+}
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -65,14 +78,17 @@ app.use('/api/dashboard', dashboardRoutes);
 // Socket.IO Real-time communication
 socketService(io);
 
-
-// Sync Google Sheets data every minute to check for updates
+// Sync Google Sheets data every 60 seconds
 setInterval(() => {
-  googleSheetsService.syncSheetData(io);
-}, 6000);
+  try {
+    googleSheetsService.syncSheetData(io);
+  } catch (error) {
+    console.error('Google Sheets Sync Error:', error);
+  }
+}, 60000);
 
 // Start server
-server.listen(process.env.PORT, () => {
-  console.log(`Server is running on http://localhost:${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
