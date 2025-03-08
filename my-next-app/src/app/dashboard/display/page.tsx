@@ -86,12 +86,22 @@ const Dashboard = () => {
       await axios.post(`${API_BASE_URL}/dashboard/add-row`, { rowData }, {
         headers: { Authorization: `Bearer ${cookies.token}` },
       });
-      // Emit event to Socket.IO server
+      // Fetch the updated data
+      const response = await axios.get(`${API_BASE_URL}/dashboard`, {
+        headers: { Authorization: `Bearer ${cookies.token}` },
+      });
+      const updatedData = response.data;
+      const newColumnNames = updatedData.columns.map((col: Column) => col.name);
+      const newRows = updatedData.rows;
+  
+      setColumns(newColumnNames.map((name: string) => ({ name })));
+      setRows(newRows);
+      // Refresh the page to reflect the new row
+      window.location.reload();
     } catch (err) {
       console.error("Error adding row", err);
     }
   };
-
   const handleLogout = () => {
     removeCookie('token', { path: '/' });
     localStorage.removeItem('token');
