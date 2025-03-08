@@ -26,13 +26,18 @@ const io = new Server(server, {
 
 // Middlewares
 app.use(cors({
-  origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app/",
-  methods: ["GET", "POST"],
-  allowedHeaders: ['Authorization', 'Content-Type'],
+  origin: "https://jatin-revoe-ai-f67p-lhysazt9t-shankarjatins-projects.vercel.app", // Update with your frontend URL
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Authorization", "Content-Type"],
   credentials: true
 }));
+
+// Handle Preflight Requests
+app.options("*", cors());
+
 app.use(express.json());
-app.options('*', cors()); // Allow preflight requests
+app.use(express.urlencoded({ extended: true }));
+
 
 
 // MongoDB connection
