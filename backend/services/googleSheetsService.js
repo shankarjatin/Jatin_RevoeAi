@@ -6,11 +6,23 @@ const firebaseAdmin = require('firebase-admin');
 
 dotenv.config();
 
-const serviceAccountPath = path.resolve(__dirname, '..', process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH);
-const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
-
+// const serviceAccountPath = path.resolve(__dirname, '..', process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH);
+const serviceAccount = {
+  type: process.env.SERVICE_ACCOUNT_TYPE,
+  project_id: process.env.SERVICE_ACCOUNT_PROJECT_ID,
+  private_key_id: process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+  private_key: process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Ensure correct formatting of the private key
+  client_email: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
+  client_id: process.env.SERVICE_ACCOUNT_CLIENT_ID,
+  auth_uri: process.env.SERVICE_ACCOUNT_AUTH_URI,
+  token_uri: process.env.SERVICE_ACCOUNT_TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL,
+  client_x509_cert_url: process.env.SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
+  universe_domain: process.env.SERVICE_ACCOUNT_UNIVERSE_DOMAIN
+};
+serviceAccountJson=JSON.stringify(serviceAccount)
 const auth = new google.auth.GoogleAuth({
-  credentials: serviceAccount,
+  credentials: serviceAccountJson,
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
