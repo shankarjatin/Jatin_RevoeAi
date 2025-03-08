@@ -13,6 +13,23 @@
 
 -Real-time Updates: Ensures new data reflects without excessive API calls.
 
+## Screenshots
+
+ ### Sign-Up
+![App Screenshot](https://i.ibb.co/KpQW4w9w/image.png)
+
+ ### Login
+![App Screenshot](https://i.ibb.co/r230VJ7p/image.png)
+
+ ### Dashboard
+![App Screenshot](https://i.ibb.co/R4TSvR2N/image.png)
+
+ ### Realtime-databse
+![App Screenshot](https://i.ibb.co/Rp0Bj27Z/image.png)
+
+
+## 🛠️ Tech Stack 
+
 ### Frontend:
 - **Next.js** (with TypeScript)
 - **TailwindCSS** (for styling)
@@ -24,6 +41,7 @@
 - **Express.js**
 - **MongoDB** (via Mongoose)
 - **Firwbase** (Realtime Database )
+- **Google Cloud** (Sheets API  )
 
   
 ## 🚀 Setup and Installation
