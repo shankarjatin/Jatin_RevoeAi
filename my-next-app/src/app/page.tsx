@@ -23,7 +23,7 @@ const Signup = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/signup`, {
+      await axios.post(`${API_BASE_URL}/auth/signup`, {
         email,
         password,
         name,
