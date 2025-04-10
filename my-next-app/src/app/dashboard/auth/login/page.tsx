@@ -19,7 +19,7 @@ import axios from 'axios';
 // Styled Component Imports
 
 import { Eye, EyeOff, Facebook, Github, Twitter } from 'lucide-react';
-const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
+const API_BASE_URL = 'https://jatin-revoeai-9o4l.onrender.com/api';
 const Login = () => {
   // States
   const [email, setEmail] = useState('');
