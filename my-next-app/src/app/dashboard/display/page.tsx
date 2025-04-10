@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
 
 import Table from '../../../components/Table';
-const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
+const API_BASE_URL = 'https://jatin-revoeai-9o4l.onrender.com/api';
 
 type Column = {
   name: string;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { FaSave } from 'react-icons/fa';
-const API_BASE_URL = 'https://jatin-revoeai-1.onrender.com/api';
+const API_BASE_URL = 'https://jatin-revoeai-9o4l.onrender.com/api';
 type TableProps = {
   columns: { name: string }[];
   rows: any[][];
